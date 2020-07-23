@@ -10,6 +10,9 @@ const app = express();
 /** Conexión a BD */
 dbConnection();
 
+/** CORS */
+app.use( cors() );
+
 /** Directorio público */
 app.use( express.static('public') );
 
