@@ -92,7 +92,7 @@ const createActivity = async ( req, res = response ) => {
 
         res.json( {
             ok: true,
-            event: activitySaved
+            activity: activitySaved
         });
         
     } catch (error) {
@@ -124,11 +124,11 @@ const updateActivity = async ( req, res = response ) => {
             updated_at: new Date(),
         };
 
-        const projectUpdated = await Activity.findByIdAndUpdate( activityId, newActivity, { new: true } );
+        const activityUpdated = await Activity.findByIdAndUpdate( activityId, newActivity, { new: true } );
 
         res.json( {
             ok: true,
-            project: projectUpdated,
+            activity: activityUpdated,
         });
     } catch (error) {
         console.log(error);

@@ -24,7 +24,7 @@ const createProject = async ( req, res = response ) => {
 
         res.json( {
             ok: true,
-            event: projectSaved
+            project: projectSaved
         });
         
     } catch (error) {
