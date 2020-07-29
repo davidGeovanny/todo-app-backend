@@ -21,6 +21,10 @@ app.use( express.json() );
 
 /** Directorio de rutas */
 app.use('/api/auth/', require('./routes/auth'));
+app.use('/api/projects/', require('./routes/project'));
+app.use('/api/activities/', require('./routes/activity'));
+app.use('/api/notes/', require('./routes/note'));
+app.use('/api/messages/', require('./routes/message'));
 
 /** Escuchar peticiones */
 app.listen( process.env.PORT, () => {
