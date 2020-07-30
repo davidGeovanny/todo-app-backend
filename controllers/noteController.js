@@ -4,6 +4,7 @@ const Project = require('../models/ProjectModel');
 const Activity = require('../models/ActivityModel');
 const Note = require('../models/NoteModel');
 const { getAllActivitiesByProject } = require('./activityController');
+const { isActivityDone, isProjectDone } = require('../helpers/checkDone');
 
 const createNote = async ( req, res = response ) => {
 
@@ -179,25 +180,10 @@ const deleteNote = async ( req, res = response ) => {
 
 const getNotesByActivity = async ( activity ) => await Note.find( { activity } );
 
-const isActivityDone = ( notes ) => {
-    const isDone = notes.some( note => note.done === false );
-
-    return !isDone;
-};
-
-const isProjectDone = ( activities ) => {
-    const isDone = activities.some( activity => activity.done === false );
-
-    return !isDone;
-}
-
 module.exports = {
     createNote,
     updateNote,
     deleteNote,
 
     getNotesByActivity,
-
-    isActivityDone,
-    isProjectDone,
 };

@@ -4,7 +4,7 @@ const Project = require('../models/ProjectModel');
 const Activity = require('../models/ActivityModel');
 const Note = require('../models/NoteModel');
 const Message = require('../models/MessageModel');
-const { isProjectDone } = require('./noteController');
+const { isProjectDone } = require('../helpers/checkDone');
 
 const getActivities = async ( req, res = response ) => {
 
