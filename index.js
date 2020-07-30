@@ -26,6 +26,11 @@ app.use('/api/activities/', require('./routes/activity'));
 app.use('/api/notes/', require('./routes/note'));
 app.use('/api/messages/', require('./routes/message'));
 
+/** Para cualquier otra petición */
+app.get('*', ( req, res ) => {
+    res.sendFile( path.join( __dirname+'/public/index.html' ) );
+});
+
 /** Escuchar peticiones */
 app.listen( process.env.PORT, () => {
     console.log(`Servidor corriendo en el puerto ${ process.env.PORT }`);
