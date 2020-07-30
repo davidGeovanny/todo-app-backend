@@ -21,14 +21,15 @@ const getActivitiesByProject = async ( req, res = response ) => {
 
     const activities = await getAllActivitiesByProject( projectId );
     let activitiesFilled = [];
+    console.log(activities[0]);
 
     for (let index = 0; index < activities.length; index++) {
         const activity = activities[index];
 
-        const notes = await Note.find();
+        const notes = await Note.find({ activity: activity.id });
         let notesToJSON = [];
 
-        const messages = await Message.find().populate('user', 'name');
+        const messages = await Message.find({ activity: activity.id }).populate('user', 'name');
         let messagesToJSON = [];
 
         for (let index = 0; index < notes.length; index++) {
