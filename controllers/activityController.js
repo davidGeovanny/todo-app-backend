@@ -4,6 +4,7 @@ const Project = require('../models/ProjectModel');
 const Activity = require('../models/ActivityModel');
 const Note = require('../models/NoteModel');
 const Message = require('../models/MessageModel');
+const { isProjectDone } = require('./noteController');
 
 const getActivities = async ( req, res = response ) => {
 
@@ -21,7 +22,6 @@ const getActivitiesByProject = async ( req, res = response ) => {
 
     const activities = await getAllActivitiesByProject( projectId );
     let activitiesFilled = [];
-    console.log(activities[0]);
 
     for (let index = 0; index < activities.length; index++) {
         const activity = activities[index];
@@ -91,9 +91,19 @@ const createActivity = async ( req, res = response ) => {
 
         const activitySaved = await activity.save();
 
+        if( project.done ) {
+            const newProject = {
+                done: false,
+                updated_at: new Date(),
+            };
+    
+            await Project.findByIdAndUpdate( activitySaved.project, newProject );
+        }
+
         res.json( {
             ok: true,
-            activity: activitySaved
+            activity: activitySaved,
+            projectDone: false,
         });
         
     } catch (error) {
@@ -156,9 +166,25 @@ const deleteActivity = async ( req, res = response ) => {
 
         const activityDeleted = await Activity.findByIdAndDelete( activityId );
 
+        let projectDone = false;
+
+        const activities = await getAllActivitiesByProject( activityDeleted.project );
+
+        if( isProjectDone( activities ) && activities.length > 0 ) {
+            projectDone = true;
+
+            const newProject = {
+                done: true,
+                updated_at: new Date(),
+            };
+
+            await Project.findByIdAndUpdate( activityDeleted.project, newProject );
+        }
+
         res.json( {
             ok: true,
-            activity: activityDeleted
+            activity: activityDeleted,
+            projectDone,
         });    
     } catch (error) {
         console.log(error);

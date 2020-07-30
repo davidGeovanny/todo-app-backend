@@ -33,10 +33,32 @@ const createNote = async ( req, res = response ) => {
         note.updated_at = new Date();
 
         const noteSaved = await note.save();
+        
+        if( activity.done ) {
+            const newActivity = {
+                done: false,
+                updated_at: new Date(),
+            };
+    
+            const activityUpdated = await Activity.findByIdAndUpdate( noteSaved.activity, newActivity );
+
+            const project = await Project.findById( activityUpdated.project );
+
+            if( project.done ) {
+                const newProject = {
+                    done: false,
+                    updated_at: new Date(),
+                };
+    
+                await Project.findByIdAndUpdate( activityUpdated.project, newProject );
+            }
+        }
 
         res.json( {
             ok: true,
-            note: noteSaved
+            note: noteSaved,
+            activityDone: false,
+            projectDone: false,
         });
         
     } catch (error) {
@@ -173,4 +195,9 @@ module.exports = {
     createNote,
     updateNote,
     deleteNote,
+
+    getNotesByActivity,
+
+    isActivityDone,
+    isProjectDone,
 };
